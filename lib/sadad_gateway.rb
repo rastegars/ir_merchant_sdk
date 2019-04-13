@@ -22,6 +22,11 @@ class SadadGateway
     call_token_request(data)
   end
 
+  def verify(authority)
+    request_body = { 'Token' => authority, 'SignData' => encrypt_pkcs7(ENV['sadad_key'], authority) }
+    HTTParty.post(ENV['sadad_request_url'], :body => request_body, format: :json).parsed_response
+  end
+
   private
     def encrypt_pkcs7(key, str)
       cipher = OpenSSL::Cipher::DES.new("EDE3")

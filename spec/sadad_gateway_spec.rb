@@ -23,4 +23,14 @@ describe SadadGateway, :type => :model do
       expect(response).to have_key('Token')
     end
   end
+
+  describe "#verify" do
+    it "is successfull" do
+      allow(subject).to receive_messages(call_token_request: { 'Token' => 'abcd', 'ResCode' => '0' })
+      allow(subject).to receive_messages(verify: { 'ResCode' => '0' })
+      token = subject.request_token['Token']
+      response = subject.verify(token)
+      expect(response['ResCode']).to eq('0')
+    end
+  end
 end
