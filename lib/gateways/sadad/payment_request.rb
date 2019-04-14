@@ -19,8 +19,13 @@ module Sadad
     end
 
     def call
-      data = "#{terminal_id};#{order_id};#{amount}"
       request_url = 'https://sadad.shaparak.ir/VPG/api/v0/Request/PaymentRequest'
+      response = HTTParty.post(request_url, :body => payload, format: :json)
+      response.parsed_response
+    end
+
+    def payload
+      data = "#{terminal_id};#{order_id};#{amount}"
       request_body = {
         'MerchantId' => merchant_id,
         'TerminalId' => terminal_id,
@@ -30,7 +35,6 @@ module Sadad
         'ReturnUrl' => return_url,
         'SignData' => encrypt_pkcs7(key, data)
       }
-
       if iban_number && !iban_number.empty? && (company_share > 0)
         request_body.merge({
           'MultiplexingData' => {
@@ -42,9 +46,6 @@ module Sadad
           }
         })
       end
-
-      response = HTTParty.post(request_url, :body => request_body, format: :json)
-      response.parsed_response
     end
 
     private

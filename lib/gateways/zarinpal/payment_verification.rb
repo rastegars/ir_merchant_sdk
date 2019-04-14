@@ -12,21 +12,27 @@ module Zarinpal
       @authority = authority
     end
 
-    def call
+    def conn
       wsdl_address = 'https://sandbox.zarinpal.com/pg/services/WebGate/wsdl'
-      message = {
-        'MerchantID' => merchant_id,
-        'Amount' => amount,
-        'Authority' => authority,
-      }
+      Savon.client(wsdl: wsdl_address)
+    end
 
-      response = Savon.client(wsdl: wsdl_address).call(:payment_verification_with_extra, message: message)
+    def call
+      response = conn.call(:payment_verification_with_extra, message: payload)
       results = response.body
       status = results[:payment_request_with_extra_response][:status]
 
       raise(ZarinpalVerificationError) if status.to_i < 100
 
       results
+    end
+
+    def payload
+      {
+        'MerchantID' => merchant_id,
+        'Amount' => amount,
+        'Authority' => authority,
+      }
     end
   end
 end

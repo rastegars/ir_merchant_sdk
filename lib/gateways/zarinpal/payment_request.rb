@@ -14,22 +14,28 @@ module Zarinpal
       @additional_data = options[:additional_data]
     end
 
-    def call
+    def conn
       wsdl_address = 'https://sandbox.zarinpal.com/pg/services/WebGate/wsdl'
-      message = {
+      Savon.client(wsdl: wsdl_address)
+    end
+
+    def call
+      response = conn.call(:payment_request_with_extra, message: payload)
+      results = response.body
+      status = results[:payment_request_with_extra_response][:status]
+
+      raise(ZarinPalError) if status.to_i < 100
+
+      results[:payment_request_with_extra_response]
+    end
+
+    def payload
+      {
         'MerchantID' => merchant_id,
         'Amount' => amount,
         'Description' => description,
         'CallbackURL' => verify_url,
       }
-
-      response = Savon.client(wsdl: wsdl_address).call(:payment_request_with_extra, message: message)
-      results = response.body
-      status = results[:payment_request_with_extra_response][:status]
-
-      raise(ZarinPalError) if status.to_i < 100 || !valid?
-
-      results[:payment_request_with_extra_response]
     end
   end
 end

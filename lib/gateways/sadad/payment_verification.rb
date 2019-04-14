@@ -14,8 +14,11 @@ module Sadad
 
     def call
       verification_url = 'https://sadad.shaparak.ir/vpg/api/v0/Advice/Verify'
-      request_body = { 'Token' => token, 'SignData' => encrypt_pkcs7(key, token) }
-      HTTParty.post(verification_url, :body => request_body, format: :json).parsed_response
+      HTTParty.post(verification_url, :body => payload, format: :json).parsed_response
+    end
+
+    def payload
+      { 'Token' => token, 'SignData' => encrypt_pkcs7(key, token) }
     end
 
     private
