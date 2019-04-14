@@ -9,7 +9,7 @@ module Sadad
 
     def initialize(options = {})
       @key = options[:key]
-      @authority = options[:token]
+      @token = options[:token]
     end
 
     def call

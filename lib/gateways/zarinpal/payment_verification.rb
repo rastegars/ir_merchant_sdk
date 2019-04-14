@@ -7,9 +7,9 @@ module Zarinpal
     attr_reader :merchant_id, :amount, :authority
 
     def initialize(options = {})
-      @merchant_id = merchant_id
-      @amount = amount
-      @authority = authority
+      @merchant_id = options[:merchant_id]
+      @amount = options[:amount]
+      @authority = options[:authority]
     end
 
     def conn
@@ -20,7 +20,7 @@ module Zarinpal
     def call
       response = conn.call(:payment_verification_with_extra, message: payload)
       results = response.body
-      status = results[:payment_request_with_extra_response][:status]
+      status = results[:payment_verification_with_extra_response][:status]
 
       raise(ZarinpalVerificationError) if status.to_i < 100
 

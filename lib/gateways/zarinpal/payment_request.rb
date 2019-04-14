@@ -2,7 +2,7 @@ require 'savon'
 
 module Zarinpal
   class PaymentRequest
-    class ZarinPalError < StandardError; end
+    class ZarinpalError < StandardError; end
 
     attr_reader :merchant_id, :amount, :callback_url, :description, :additional_data
 
@@ -24,7 +24,7 @@ module Zarinpal
       results = response.body
       status = results[:payment_request_with_extra_response][:status]
 
-      raise(ZarinPalError) if status.to_i < 100
+      raise(ZarinpalError) if status.to_i < 100
 
       results[:payment_request_with_extra_response]
     end
@@ -34,7 +34,8 @@ module Zarinpal
         'MerchantID' => merchant_id,
         'Amount' => amount,
         'Description' => description,
-        'CallbackURL' => verify_url,
+        'CallbackURL' => callback_url,
+        'AdditionalData' => ''
       }
     end
   end
