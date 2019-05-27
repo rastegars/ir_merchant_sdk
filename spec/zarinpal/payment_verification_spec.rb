@@ -1,7 +1,7 @@
 require 'spec_helper'
-require './lib/gateways/zarinpal/payment_verification'
+require 'ir_merchant_sdk/gateways/zarinpal/payment_verification'
 
-describe Zarinpal::PaymentVerification, :type => :model do
+RSpec.describe Zarinpal::PaymentVerification, :type => :model do
   subject do 
     Zarinpal::PaymentVerification.new({
       merchant_id: '12345678',

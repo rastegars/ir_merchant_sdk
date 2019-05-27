@@ -1,7 +1,7 @@
 require 'spec_helper'
-require './lib/gateways/sadad/payment_request'
+require 'ir_merchant_sdk/gateways/sadad/payment_request'
 
-describe Sadad::PaymentRequest, :type => :model do
+RSpec.describe Sadad::PaymentRequest, :type => :model do
   subject do 
     Sadad::PaymentRequest.new({
       key: 'X' * 32,

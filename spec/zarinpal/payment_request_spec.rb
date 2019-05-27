@@ -1,7 +1,7 @@
 require 'spec_helper'
-require './lib/gateways/zarinpal/payment_request'
+require 'ir_merchant_sdk/gateways/zarinpal/payment_request'
 
-describe Zarinpal::PaymentRequest, :type => :model do
+RSpec.describe Zarinpal::PaymentRequest, :type => :model do
   subject do 
     Zarinpal::PaymentRequest.new({
       merchant_id: '12345678',
