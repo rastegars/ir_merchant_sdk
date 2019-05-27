@@ -1,5 +1,6 @@
 require 'spec_helper'
 require 'ir_merchant_sdk/gateways/sadad/payment_request'
+require 'webmock/rspec'
 
 RSpec.describe Sadad::PaymentRequest, :type => :model do
   subject do 
@@ -17,7 +18,8 @@ RSpec.describe Sadad::PaymentRequest, :type => :model do
 
   describe "#call" do
     it "returns a token" do
-      allow(subject).to receive_messages(call: { 'Token' => 'abcd', 'ResCode' => '0' })
+      request_url = 'https://sadad.shaparak.ir/VPG/api/v0/Request/PaymentRequest'
+      stub_request(:post, request_url).to_return(status: 200, body: { Token: 'abcd', ResCode: '0' }.to_json)
       response = subject.call
       expect(response['ResCode']).to eq('0')
       expect(response).to have_key('Token')

@@ -35,7 +35,8 @@ module Sadad
         'ReturnUrl' => return_url,
         'SignData' => encrypt_pkcs7(key, data)
       }
-      if iban_number && !iban_number.empty? && (company_share > 0)
+
+      if iban_number && !iban_number.empty? && (percentage > 0)
         request_body.merge({
           'MultiplexingData' => {
             'Type' => "Percentage",
