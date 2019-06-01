@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'date'
 require 'openssl'
 require 'base64'
@@ -20,7 +22,7 @@ module Sadad
 
     def call
       request_url = 'https://sadad.shaparak.ir/VPG/api/v0/Request/PaymentRequest'
-      response = HTTParty.post(request_url, :body => payload, format: :json)
+      response = HTTParty.post(request_url, body: payload, format: :json)
       response.parsed_response
     end
 
@@ -37,27 +39,28 @@ module Sadad
       }
 
       if iban_number && !iban_number.empty? && (percentage > 0)
-        request_body.merge({
+        request_body.merge(
           'MultiplexingData' => {
-            'Type' => "Percentage",
+            'Type' => 'Percentage',
             'MultiplexingRows' => [
               'IbanNumber' => iban_number,
               'Percentage' => percentage
             ]
           }
-        })
+        )
       end
       request_body
     end
 
     private
-      # This method will be moved to a seperate module
-      def encrypt_pkcs7(key, str)
-        cipher = OpenSSL::Cipher::DES.new("EDE3")
-        cipher.encrypt
-        cipher.key = Base64.decode64(key)
-        cipher_text = cipher.update(str) + cipher.final
-        Base64.strict_encode64(cipher_text)
-      end  
+
+    # This method will be moved to a seperate module
+    def encrypt_pkcs7(key, str)
+      cipher = OpenSSL::Cipher::DES.new('EDE3')
+      cipher.encrypt
+      cipher.key = Base64.decode64(key)
+      cipher_text = cipher.update(str) + cipher.final
+      Base64.strict_encode64(cipher_text)
+    end
   end
 end

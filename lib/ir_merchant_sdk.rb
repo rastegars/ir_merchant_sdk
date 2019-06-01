@@ -1,4 +1,6 @@
-require "ir_merchant_sdk/version"
+# frozen_string_literal: true
+
+require 'ir_merchant_sdk/version'
 
 module IrMerchantSdk
   class Error < StandardError; end

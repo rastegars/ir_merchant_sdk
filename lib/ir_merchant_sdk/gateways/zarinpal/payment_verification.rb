@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'savon'
 
 module Zarinpal
@@ -31,7 +33,7 @@ module Zarinpal
       {
         'MerchantID' => merchant_id,
         'Amount' => amount,
-        'Authority' => authority,
+        'Authority' => authority
       }
     end
   end
